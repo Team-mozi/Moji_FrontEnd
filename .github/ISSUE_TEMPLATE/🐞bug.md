@@ -1,7 +1,7 @@
 ---
 name: "\U0001F41EBug"
 about: Bug 발생 시 작성해 주세요.
-title: ''
+title: "[Fix]"
 labels: "\U0001F41E BugFix"
 assignees: ''
 

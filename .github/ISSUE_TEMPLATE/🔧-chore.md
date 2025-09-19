@@ -1,8 +1,8 @@
 ---
-name: "✅Feature request"
-about: Feature 작업 상황을 입력해주세요.
-title: "[Feat]"
-labels: "✨ Feature"
+name: "\U0001F527 Chore"
+about: 기타 변경 사항을 작성해 주세요.
+title: "[Chore]"
+labels: "\U0001F527 chore"
 assignees: ''
 
 ---
