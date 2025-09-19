@@ -1,0 +1,57 @@
+{
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
+  ],
+  "compilerOptions": {
+    "target": "esnext", // ECMAScript 버전
+
+    "module": "esnext", // 모듈 시스템. esnext-최신 버전
+
+    "strict": true, // 엄격한 타입 검사 ( true 권장 )
+
+    "esModuleInterop": true, // CommonJS 모듈을 ES6 모듈처럼 사용 가능
+    // import * as fooModule from './commonjs-module'를
+    // import foo from './commonjs-module'; 로 사용 가능하게 해줌.
+    // 즉, default import, named import 모두 사용 가능
+    // 아래의 "allowSyntheticDefaultImports" 옵션과 같이 사용하는 경우가 많음.
+
+    "skipLibCheck": true, // 라이브러리 파일의 타입 검사를 건너뜀.
+
+    "forceConsistentCasingInFileNames": true, // 파일 이름의 대소문자 일관성 강제
+
+    "baseUrl": ".", // 모듈 해석을 위한 기본 디렉토리 지정.
+    // 예를 들어, baseUrl : "." 일땐, ./src/abcd.ts 로 입력,
+    // 		   baseUrl : "./src" 일땐, ./abcd.ts 로 입력
+
+    "paths": {
+      "@/*": ["src/*"]
+    }, // `@` 는 `/src` 경로를 의미하도록 별칭 설정
+    "typeRoots": ["node_modules/@types"], //  ["node_modules/@types"] 가 default
+    // 타입 정의 파일이 위치하는 디렉토리를 지정
+    // include 옵션에서 이미 .d.ts 파일이 포함된 경우, typeRoots는 type.d.ts 파일을 자동으로 인식되므로 지정하지않아도 됨
+    // typeRoots를 추가적으로 지정했을 경우, ["node_modules/@types"]는 반드시 작성해야함.
+    // 외부 모듈을 사용할 때, Could not find a declaration file for module 오류가 발생하면,
+    // 1. @type/모듈명 을 설치하거나, 2. 직접 정의해서 이 부분에 추가해야함.
+
+    "types": ["node"], // typeRoots의 경로에서 찾은 특정 타입 선언 파일만 포함하도록 제한
+    "allowSyntheticDefaultImports": true, // CommonJS 모듈을 ES6 스타일로 import 가능.
+    // default export를 하지 않아도, default import 문법을 사용 가능
+
+    "jsx": "react-jsx", // React 16이하의 버전일때,
+    // React.createElement을 createElement로 작성해도 알아서 변환이 가능하게 함.
+
+    "moduleResolution": "node" //  TypeScript가 모듈을 어떻게 해석할지 결정.
+    // "node" - Node.js 스타일의 모듈 해석을 사용
+    // "classic": TypeScript의 오래된 모듈 해석 방식. 레거시 코드에서만 사용
+    // 예를 들어, "node" 설정 시, src/components/Button.tsx 파일을
+    // src/components/Button으로 해석
+    // default값은 "node" 임
+  },
+
+  "include": ["src/**/*"], // 또는, "include": ["src/**/*.ts", "src/**/*.tsx"]
+  // 컴파일할 파일이나, 디렉토리 지정
+
+  "exclude": ["node_modules", "dist"] // 컴파일에서 제외할 파일/디렉토리 지정,
+}
