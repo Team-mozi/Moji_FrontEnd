@@ -1,8 +1,8 @@
 ---
-name: "✅Feature request"
-about: Feature 작업 상황을 입력해주세요.
-title: "[Feat]"
-labels: "✨ Feature"
+name: "⚙️ Refactor"
+about: 리팩토링 내용을 작성해 주세요.
+title: "[Refactor]"
+labels: "⚙️ refactor"
 assignees: ''
 
 ---
