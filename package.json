@@ -8,10 +8,12 @@
     "build": "tsc -b && vite build",
     "lint": "eslint \"src/**/*.{js,jsx,ts,tsx}\"",
     "lint:fix": "eslint --fix \"src/**/*.{js,jsx,ts,tsx}\"",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "refreshApi": "cd openapi-config && bash ./generate.sh"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.9.0",
+    "@rtk-query/codegen-openapi": "^2.0.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-redux": "^9.2.0",

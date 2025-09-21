@@ -88,3 +88,49 @@ vite.config.ts               # Vite 설정(+ @ 별칭)
 - switch는 항상 `default:` 처리
 - 한 줄 하나의 변수 선언
 - ESLint–Prettier 충돌 시 Prettier 우선 (필요 시 규칙 조정)
+
+## 🔄 API 자동화 시스템
+
+### 📋 개요
+Swagger API 문서를 기반으로 RTK Query 훅과 TypeScript 타입을 자동 생성하는 시스템입니다.
+
+### 🛠️ 기술 스택
+- **@rtk-query/codegen-openapi**: OpenAPI 스펙을 RTK Query 코드로 변환
+- **자동 타입 생성**: TypeScript 타입 정의 자동 생성
+- **훅 자동 생성**: React Query 훅 자동 생성
+
+### 🚀 사용 방법
+
+#### 1. API 스키마 자동 생성
+```bash
+npm run refreshApi
+```
+
+#### 2. 생성되는 파일들
+- `src/services/endpoints/user.ts` - 사용자 관련 API (로그인, 회원가입 등)
+- `src/services/endpoints/userEmoji.ts` - 사용자 이모지 관련 API
+- `src/services/endpoints/emoji.ts` - 이모지 관련 API
+
+#### 3. 사용 예시
+```typescript
+// 자동 생성된 훅 사용
+import { useLoginMutation, useGetEmojisQuery } from '@/services/endpoints'
+
+// 로그인
+const [login, { isLoading }] = useLoginMutation()
+await login({ loginRequest: { email, password } })
+
+// 이모지 목록 조회
+const { data: emojis } = useGetEmojisQuery()
+```
+
+### ⚙️ 설정 파일
+- `openapi-config/mozi_api.js`: API 생성 설정
+- `openapi-config/generate.sh`: 생성 스크립트
+
+### 🔧 설정 커스터마이징
+`openapi-config/mozi_api.js`에서 다음을 수정할 수 있습니다:
+- API 엔드포인트 필터링
+- 출력 파일 경로
+- 훅 생성 옵션
+
