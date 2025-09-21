@@ -1,0 +1,1 @@
+npx @rtk-query/codegen-openapi mozi_api.js
