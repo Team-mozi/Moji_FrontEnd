@@ -24,7 +24,7 @@ const config = {
       exportName: 'UserApi',
       filterEndpoints: pathMatcher(/^\/api\/users/i),
     },
-    '../src/services/endpoints/userEmoji.ts': {
+    '../src/services/endpoints/user-emoji.ts': {
       exportName: 'UserEmojiApi',
       filterEndpoints: pathMatcher(/^\/api\/user-emojis/i),
     },
