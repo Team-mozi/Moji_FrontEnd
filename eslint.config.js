@@ -11,7 +11,7 @@ import react from 'eslint-plugin-react'
 import importPlugin from 'eslint-plugin-import'
 
 export default defineConfig([
-  globalIgnores(['dist']),
+  globalIgnores(['dist', 'node_modules/']),
   {
     files: ['**/*.{ts,tsx}'],
     extends: [
@@ -34,16 +34,18 @@ export default defineConfig([
       // 컴포넌트/클래스 파스칼케이스 (JSX)
       'react/jsx-pascal-case': 'error',
 
+      // React 17+ JSX Transform에서는 필요 없음
+      'react/react-in-jsx-scope': 'off',
+
       // 네이밍/가독성
       'func-names': ['error', 'as-needed'],
       'id-match': [
         'error',
+        '^([a-z][a-zA-Z0-9]*|[A-Z][a-zA-Z0-9]*)$',
         {
-          'properties': false,
-          'onlyDeclarations': false,
-          'ignoreDestructuring': false,
-          'caseSensitive': true,
-          'regex': '^([a-z][a-zA-Z0-9]*|[A-Z][a-zA-Z0-9]*)$',
+          properties: false,
+          onlyDeclarations: false,
+          ignoreDestructuring: false,
         },
       ],
 
@@ -63,18 +65,45 @@ export default defineConfig([
       'perfectionist/sort-imports': ['warn', { type: 'natural', order: 'asc' }],
       'perfectionist/sort-objects': ['warn', { type: 'natural', order: 'asc' }],
 
-      // default export 지양
+      // default export 지양 (특정 경로에서만 허용)
       'import/no-default-export': 'warn',
     },
     settings: {
       react: { version: 'detect' },
     },
   },
-  // 컴포넌트 폴더만 PascalCase 파일명 허용
+  // 컴포넌트/페이지/레이아웃/라우트 폴더는 PascalCase 파일명 허용
   {
-    files: ['src/**/components/**/*.{ts,tsx}'],
+    files: ['src/**/{components,pages,layouts,routes}/**/*.{ts,tsx}'],
     rules: {
       'unicorn/filename-case': ['error', { case: 'pascalCase' }],
+    },
+  },
+  // 최상위 App 파일 허용
+  {
+    files: ['src/App.tsx'],
+    rules: {
+      'unicorn/filename-case': ['error', { case: 'pascalCase' }],
+    },
+  },
+  // App, pages, routes에서는 default export 허용
+  {
+    files: [
+      'src/App.tsx',
+      'src/pages/**/*.{ts,tsx}',
+      'src/routes/**/*.{ts,tsx}',
+    ],
+    rules: {
+      'import/no-default-export': 'off',
+    },
+  },
+  // 자동 생성된 OpenAPI 엔드포인트 파일 완화
+  {
+    files: ['src/services/endpoints/**/*.{ts,tsx}'],
+    rules: {
+      'perfectionist/sort-objects': 'off',
+      'perfectionist/sort-imports': 'off',
+      'import/no-default-export': 'off',
     },
   },
 ])

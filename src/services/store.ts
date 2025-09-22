@@ -1,13 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit'
+
 import { api } from './api'
 
 export const store = configureStore({
+  devTools: import.meta.env.MODE !== 'production',
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(api.middleware),
   reducer: {
     [api.reducerPath]: api.reducer,
   },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(api.middleware),
-  devTools: import.meta.env.MODE !== 'production',
 })
 
 export type RootState = ReturnType<typeof store.getState>

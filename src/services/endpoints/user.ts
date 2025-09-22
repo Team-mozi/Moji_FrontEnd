@@ -71,8 +71,7 @@ export type SocialLoginApiResponse =
 export type SocialLoginApiArg = {
   socialLoginRequest: SocialLoginRequest
 }
-export type RegisterApiResponse =
-  /** status 200 OK */ ApiResponseRegisterResponse
+export type RegisterApiResponse = /** status 200 OK */ ApiResponseLong
 export type RegisterApiArg = {
   registerRequest: RegisterRequest
 }
@@ -120,16 +119,10 @@ export type SocialLoginRequest = {
   /** 소셜 인증 토큰 */
   providerToken: string
 }
-export type RegisterResponse = {
-  /** 회원 번호 */
-  userId?: number
-  /** 이메일 */
-  email?: string
-}
-export type ApiResponseRegisterResponse = {
+export type ApiResponseLong = {
   code?: string
   message?: string
-  data?: RegisterResponse
+  data?: number
 }
 export type RegisterRequest = {
   /** 이메일 */
@@ -137,7 +130,7 @@ export type RegisterRequest = {
   /** 비밀번호 */
   password: string
   /** 약관동의 여부 */
-  agreed: boolean
+  agreed?: boolean
 }
 export type UserResponse = {
   /** 회원 번호 */
