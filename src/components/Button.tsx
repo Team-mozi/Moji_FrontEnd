@@ -9,19 +9,20 @@ type ButtonProps = {
   primary?: boolean // 이 값이 true일 경우, primary(보더라인 버튼) 색상 스타일이 적용됩니다.
 }
 
-export function Button({
+const Button = ({
   label,
   onClick,
   className = '',
   type = 'button',
   primary = false,
-}: ButtonProps) {
+}: ButtonProps) => {
   // 모든 버튼에 공통으로 적용되는 기본 스타일들을 정의합니다. (기본 높이는 h-12 고정, 길이는 커스텀해서 사용)
   const baseClasses = `
-      h-12
-      rounded-xl px-4 text-sm sm:text-base font-normal
-      focus:outline-none transition-colors duration-300
-    `
+    h-12
+    rounded-xl px-4 text-sm sm:text-base font-normal
+    focus:outline-none transition-colors duration-300
+  `
+
   // primary prop 값에 따라 다르게 적용되는 스타일을 정의합니다.
   const colorClasses = primary
     ? 'bg-orange_three text-black hover:bg-orange_four' // primary 상태일 때 주황색 배경, 검정 텍스트
@@ -38,3 +39,5 @@ export function Button({
     </button>
   )
 }
+
+export default Button
