@@ -24,3 +24,5 @@ dist-ssr
 *.sw?
 
 Mozi_FrontEnd
+*storybook.log
+storybook-static
