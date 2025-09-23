@@ -13,7 +13,7 @@ type InputProps = {
   hasShadow?: boolean // 그림자 효과 여부
 }
 
-export function Input({
+const Input = ({
   className = '',
   isConfirmPassword = false,
   label,
@@ -24,7 +24,7 @@ export function Input({
   type = 'text',
   maxLength,
   hasShadow = false,
-}: InputProps) {
+}: InputProps) => {
   const [value, setValue] = useState('')
   const [error, setError] = useState('')
 
@@ -101,3 +101,5 @@ export function Input({
     </div>
   )
 }
+
+export default Input
