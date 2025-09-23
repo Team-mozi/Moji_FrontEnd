@@ -8,9 +8,10 @@ type InputProps = {
   required?: boolean // 필수 입력 여부
   onChange?: (value: string) => void // 값 변경 시 실행되는 콜백
   isConfirmPassword?: boolean // 비밀번호 확인용 여부 (true일 경우 규칙 검증 스킵)
-  className?: string // 스타일 커스터마이징 (width 길이 설정 권장)
+  className?: string // 스타일 커스터마이징
   maxLength?: number // 최대 입력 길이 (이 값이 있을 때만 길이 표시)
   hasShadow?: boolean // 그림자 효과 여부
+  size?: 's' | 'm' | 'l' | 'xl' // 넓이 ('s', 'm', 'l', 'xl')를 설정합니다. (기본값: 'full')
 }
 
 const Input = ({
@@ -24,6 +25,7 @@ const Input = ({
   type = 'text',
   maxLength,
   hasShadow = false,
+  size,
 }: InputProps) => {
   const [value, setValue] = useState('')
   const [error, setError] = useState('')
@@ -58,6 +60,18 @@ const Input = ({
     if (onChange) onChange(inputValue)
   }
 
+  // size prop에 따라 다르게 적용되는 너비 스타일을 정의합니다.
+  const inputSizeClasses =
+    size === 's'
+      ? 'w-[180px]'
+      : size === 'm'
+        ? 'w-[288px]'
+        : size === 'l'
+          ? 'w-[300px]'
+          : size === 'xl'
+            ? 'w-[448px]'
+            : 'w-full' // 기본값: w-full
+
   // maxLength prop의 유무에 따라 input의 padding-right 값을 동적으로 결정
   const inputPaddingRightClass = maxLength ? 'pr-14' : 'pr-4'
 
@@ -87,6 +101,7 @@ const Input = ({
             ${inputPaddingRightClass}
             placeholder-gray_one
             placeholder:font-normal
+            ${inputSizeClasses}
             w-full`}
         />
         {maxLength && (
