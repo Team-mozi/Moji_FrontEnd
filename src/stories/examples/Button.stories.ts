@@ -8,7 +8,7 @@ import { Button } from './Button'
 // - tags: autodocs 활성화 (자동 문서화)
 const meta = {
   // 파일 경로와 같게 설정
-  title: 'Components/Button',
+  title: 'Examples/Button',
   component: Button,
   parameters: {
     layout: 'centered',

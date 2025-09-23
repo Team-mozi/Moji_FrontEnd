@@ -8,7 +8,7 @@ type InputProps = {
   required?: boolean // 필수 입력 여부
   onChange?: (value: string) => void // 값 변경 시 실행되는 콜백
   isConfirmPassword?: boolean // 비밀번호 확인용 여부 (true일 경우 규칙 검증 스킵)
-  className?: string // 스타일 커스터마이징
+  className?: string // 스타일 커스터마이징 (width 길이 설정 권장)
   maxLength?: number // 최대 입력 길이 (이 값이 있을 때만 길이 표시)
   hasShadow?: boolean // 그림자 효과 여부
 }
@@ -62,7 +62,7 @@ const Input = ({
   const inputPaddingRightClass = maxLength ? 'pr-14' : 'pr-4'
 
   return (
-    <div className={`flex flex-col gap-1 w-full ${className}`}>
+    <div className={`flex flex-col gap-1 ${className}`}>
       {label && (
         <label
           htmlFor={name}
@@ -81,9 +81,9 @@ const Input = ({
           value={value}
           onChange={handleChange}
           maxLength={maxLength}
-          className={`border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 font-normal text-sm sm:text-base 
+          className={`h-12 border rounded-xl px-4 transition-colors duration-300 focus:outline-none focus:ring-1 hover:border-orange_three font-normal text-sm sm:text-base 
             ${hasShadow ? 'shadow-md' : ''}
-            ${error ? 'focus:ring-red_one' : 'border-gray_one focus:ring-orange_three'}
+            ${error ? 'focus:ring-red_one' : ' focus:ring-orange_three'}
             ${inputPaddingRightClass}
             placeholder-gray_one
             placeholder:font-normal
