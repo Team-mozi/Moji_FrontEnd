@@ -13,31 +13,33 @@ const RegisterForm = () => {
   const [register] = UserApi.useRegisterMutation()
   const navigate = useNavigate()
 
+  // 🔹 공통: 비밀번호 일치 여부 검증
+  const validatePasswords = (pwd: string, confirmPwd: string) => {
+    if (pwd && confirmPwd && pwd !== confirmPwd) {
+      setPasswordMatchError('비밀번호가 일치하지 않습니다.')
+    } else {
+      setPasswordMatchError('')
+    }
+  }
+
+  // 비밀번호 입력 시
   const handlePasswordChange = (value: string) => {
     setPassword(value)
-    if (confirmPassword && value !== confirmPassword) {
-      setPasswordMatchError('비밀번호가 일치하지 않습니다.')
-    } else {
-      setPasswordMatchError('')
-    }
+    validatePasswords(value, confirmPassword)
   }
 
+  // 비밀번호 재확인 입력 시
   const handleConfirmPasswordChange = (value: string) => {
     setConfirmPassword(value)
-    if (password && value !== password) {
-      setPasswordMatchError('비밀번호가 일치하지 않습니다.')
-    } else {
-      setPasswordMatchError('')
-    }
+    validatePasswords(password, value)
   }
 
+  // 회원가입 요청
   const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    if (password !== confirmPassword) {
-      setPasswordMatchError('비밀번호가 일치하지 않습니다.')
-      return
-    }
+    // 불일치 시 API 요청 차단
+    if (password !== confirmPassword) return
 
     try {
       await register({
