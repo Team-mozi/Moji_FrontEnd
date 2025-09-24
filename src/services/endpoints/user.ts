@@ -8,6 +8,13 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg.socialLoginRequest,
       }),
     }),
+    reissue: build.mutation<ReissueApiResponse, ReissueApiArg>({
+      query: (queryArg) => ({
+        url: `/api/users/reissue`,
+        method: 'POST',
+        body: queryArg.tokenRefreshRequest,
+      }),
+    }),
     register: build.mutation<RegisterApiResponse, RegisterApiArg>({
       query: (queryArg) => ({
         url: `/api/users/register`,
@@ -71,6 +78,10 @@ export type SocialLoginApiResponse =
 export type SocialLoginApiArg = {
   socialLoginRequest: SocialLoginRequest
 }
+export type ReissueApiResponse = /** status 200 OK */ ApiResponseString
+export type ReissueApiArg = {
+  tokenRefreshRequest: TokenRefreshRequest
+}
 export type RegisterApiResponse = /** status 200 OK */ ApiResponseLong
 export type RegisterApiArg = {
   registerRequest: RegisterRequest
@@ -101,6 +112,7 @@ export type DeleteUserApiArg = {
   userDeleteRequest: UserDeleteRequest
 }
 export type LoginResponse = {
+  refreshToken?: string
   /** 액세스 토큰 */
   accessToken?: string
   /** 회원 번호 */
@@ -118,6 +130,14 @@ export type SocialLoginRequest = {
   provider: string
   /** 소셜 인증 토큰 */
   providerToken: string
+}
+export type ApiResponseString = {
+  code?: string
+  message?: string
+  data?: string
+}
+export type TokenRefreshRequest = {
+  refreshToken?: string
 }
 export type ApiResponseLong = {
   code?: string
@@ -176,6 +196,7 @@ export type UserDeleteRequest = {
 }
 export const {
   useSocialLoginMutation,
+  useReissueMutation,
   useRegisterMutation,
   useUpdateUserNicknameMutation,
   useLogoutMutation,
