@@ -11,7 +11,11 @@ type InputProps = {
   className?: string // 스타일 커스터마이징
   maxLength?: number // 최대 입력 길이 (이 값이 있을 때만 길이 표시)
   hasShadow?: boolean // 그림자 효과 여부
-  size?: 's' | 'm' | 'l' | 'xl' // 넓이 ('s', 'm', 'l', 'xl')를 설정합니다. (기본값: 'full')
+  size?: 's' | 'm' | 'l' | 'xl' | 'full' // 넓이 설정 ('s', 'm', 'l', 'xl', 'full') (기본값: 'full')
+  errorMessage?: string // 외부에서 내려주는 에러 메시지
+  errorClassName?: string // 에러 메시지 CSS 커스터마이징
+  containerClassName?: string // input 컨테이너 스타일 커스터마이징
+  showError?: boolean // 에러 메시지 표시 여부
 }
 
 const Input = ({
@@ -25,26 +29,36 @@ const Input = ({
   type = 'text',
   maxLength,
   hasShadow = false,
-  size,
+  size = 'full',
+  errorMessage,
+  errorClassName = 'text-red_one',
+  containerClassName = '',
+  showError = true,
 }: InputProps) => {
   const [value, setValue] = useState('')
   const [error, setError] = useState('')
+
+  const inputSizeClasses = {
+    s: 'w-[180px]',
+    m: 'w-[288px]',
+    l: 'w-[300px]',
+    xl: 'w-[448px]',
+    full: 'w-full',
+  }
 
   const validate = (inputValue: string) => {
     if (isConfirmPassword) return ''
 
     if (type === 'email') {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-      if (!emailRegex.test(inputValue)) {
+      if (!emailRegex.test(inputValue))
         return '이메일 주소를 정확히 입력해주세요.'
-      }
     }
 
     if (type === 'password') {
       const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/
-      if (!passwordRegex.test(inputValue)) {
+      if (!passwordRegex.test(inputValue))
         return '8자 이상, 대소문자, 숫자, 특수문자를 포함해야 합니다.'
-      }
     }
 
     return ''
@@ -60,23 +74,11 @@ const Input = ({
     if (onChange) onChange(inputValue)
   }
 
-  // size prop에 따라 다르게 적용되는 너비 스타일을 정의합니다.
-  const inputSizeClasses =
-    size === 's'
-      ? 'w-[180px]'
-      : size === 'm'
-        ? 'w-[288px]'
-        : size === 'l'
-          ? 'w-[300px]'
-          : size === 'xl'
-            ? 'w-[448px]'
-            : 'w-full' // 기본값: w-full
-
-  // maxLength prop의 유무에 따라 input의 padding-right 값을 동적으로 결정
   const inputPaddingRightClass = maxLength ? 'pr-14' : 'pr-4'
 
   return (
-    <div className={`flex flex-col gap-1 ${className}`}>
+    <div className={`relative flex flex-col gap-1 ${containerClassName}`}>
+      {/* 라벨 조건부 렌더링 */}
       {label && (
         <label
           htmlFor={name}
@@ -85,7 +87,7 @@ const Input = ({
           {label}
         </label>
       )}
-      <div className='relative'>
+      <div>
         <input
           id={name}
           name={name}
@@ -97,21 +99,27 @@ const Input = ({
           maxLength={maxLength}
           className={`h-12 border rounded-xl px-4 transition-colors duration-300 focus:outline-none focus:ring-1 hover:border-orange_three font-normal text-sm sm:text-base 
             ${hasShadow ? 'shadow-md' : ''}
-            ${error ? 'focus:ring-red_one' : ' focus:ring-orange_three'}
+            ${error || errorMessage ? 'focus:ring-red-500' : 'focus:ring-orange_three'}
             ${inputPaddingRightClass}
             placeholder-gray_one
             placeholder:font-normal
-            ${inputSizeClasses}
-            w-full`}
+            ${inputSizeClasses[size]}
+            ${className}`}
         />
+        {/* 입력 길이 표시 조건부 렌더링 */}
         {maxLength && (
           <span className='absolute right-4 top-1/2 -translate-y-1/2 text-gray_one text-xs pointer-events-none'>
             {value.length}/{maxLength}
           </span>
         )}
       </div>
-      {!isConfirmPassword && error && (
-        <p className='text-xs sm:text-sm text-red_one'>{error}</p>
+      {/* 에러 메시지 조건부 렌더링 */}
+      {showError && (errorMessage || error) && (
+        <p
+          className={`absolute -bottom-5 text-xs sm:text-sm mt-1 ${errorClassName}`}
+        >
+          {errorMessage || error}
+        </p>
       )}
     </div>
   )

@@ -26,3 +26,6 @@ dist-ssr
 Mozi_FrontEnd
 *storybook.log
 storybook-static
+
+.env
+.env.*
