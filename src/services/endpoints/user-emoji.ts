@@ -8,31 +8,23 @@ const injectedRtkApi = api.injectEndpoints({
       query: (queryArg) => ({
         url: `/api/user-emojis`,
         method: 'POST',
-        body: queryArg.userEmojiCreateRequest,
+        body: queryArg.body,
       }),
     }),
     getUserEmojiDetail: build.query<
       GetUserEmojiDetailApiResponse,
       GetUserEmojiDetailApiArg
     >({
-      query: (queryArg) => ({
-        url: `/api/user-emojis/${queryArg.userEmojiId}`,
-      }),
+      query: (queryArg) => ({ url: `/api/user-emojis/${queryArg.id}` }),
     }),
     deleteUserEmoji: build.mutation<
       DeleteUserEmojiApiResponse,
       DeleteUserEmojiApiArg
     >({
       query: (queryArg) => ({
-        url: `/api/user-emojis/${queryArg.userEmojiId}`,
+        url: `/api/user-emojis/${queryArg.id}`,
         method: 'DELETE',
       }),
-    }),
-    getRandomUserEmojis: build.query<
-      GetRandomUserEmojisApiResponse,
-      GetRandomUserEmojisApiArg
-    >({
-      query: () => ({ url: `/api/user-emojis/random` }),
     }),
     getLatestUserEmoji: build.query<
       GetLatestUserEmojiApiResponse,
@@ -40,41 +32,48 @@ const injectedRtkApi = api.injectEndpoints({
     >({
       query: () => ({ url: `/api/user-emojis/latest` }),
     }),
+    getUserEmojiHighlights: build.query<
+      GetUserEmojiHighlightsApiResponse,
+      GetUserEmojiHighlightsApiArg
+    >({
+      query: () => ({ url: `/api/user-emojis/highlights` }),
+    }),
   }),
   overrideExisting: false,
 })
 export { injectedRtkApi as UserEmojiApi }
 export type CreateUserEmojiApiResponse = /** status 200 OK */ ApiResponseLong
 export type CreateUserEmojiApiArg = {
-  userEmojiCreateRequest: UserEmojiCreateRequest
+  body: {
+    request: UserEmojiCreateRequest
+    images?: Blob[]
+  }
 }
 export type GetUserEmojiDetailApiResponse =
   /** status 200 OK */ ApiResponseUserEmojiDetailResponse
 export type GetUserEmojiDetailApiArg = {
-  userEmojiId: number
+  id: number
 }
 export type DeleteUserEmojiApiResponse = /** status 200 OK */ ApiResponseVoid
 export type DeleteUserEmojiApiArg = {
-  userEmojiId: number
+  id: number
 }
-export type GetRandomUserEmojisApiResponse =
-  /** status 200 OK */ ApiResponseListRandomUserEmojiResponse
-export type GetRandomUserEmojisApiArg = void
 export type GetLatestUserEmojiApiResponse =
-  /** status 200 OK */ ApiResponseUserEmojiResponse
+  /** status 200 OK */ ApiResponseLatestMyEmojiResponse
 export type GetLatestUserEmojiApiArg = void
+export type GetUserEmojiHighlightsApiResponse =
+  /** status 200 OK */ ApiResponseUserEmojiHighlightsResponse
+export type GetUserEmojiHighlightsApiArg = void
 export type ApiResponseLong = {
   code?: string
   message?: string
   data?: number
 }
 export type UserEmojiCreateRequest = {
-  /** 이모지 번호 */
+  /** 선택한 이모지 번호 */
   emojiId: number
   /** 내용 */
   text?: string
-  /** 이미지 URL 목록 */
-  imageUrls?: string[]
 }
 export type UserEmojiDetailResponse = {
   /** 유저 이모지 번호 */
@@ -87,6 +86,8 @@ export type UserEmojiDetailResponse = {
   text?: string
   /** 이미지 URL 목록 */
   imageUrls?: string[]
+  /** 생성 시각 */
+  createdAt?: string
 }
 export type ApiResponseUserEmojiDetailResponse = {
   code?: string
@@ -98,20 +99,7 @@ export type ApiResponseVoid = {
   message?: string
   data?: object
 }
-export type RandomUserEmojiResponse = {
-  /** 유저 이모지 번호 */
-  userEmojiId?: number
-  /** 유저 닉네임 */
-  nickname?: string
-  /** 이모지 번호 */
-  emojiId?: number
-}
-export type ApiResponseListRandomUserEmojiResponse = {
-  code?: string
-  message?: string
-  data?: RandomUserEmojiResponse[]
-}
-export type UserEmojiResponse = {
+export type LatestMyEmojiResponse = {
   /** 유저 이모지 번호 */
   userEmojiId?: number
   /** 유저 번호 */
@@ -119,18 +107,40 @@ export type UserEmojiResponse = {
   /** 이모지 번호 */
   emojiId?: number
 }
-export type ApiResponseUserEmojiResponse = {
+export type ApiResponseLatestMyEmojiResponse = {
   code?: string
   message?: string
-  data?: UserEmojiResponse
+  data?: LatestMyEmojiResponse
+}
+export type RandomUserEmojiResponse = {
+  /** 유저 이모지 번호 */
+  userEmojiId?: number
+  /** 이모지 번호 */
+  emojiId?: number
+}
+export type RepresentativeEmojiResponse = {
+  /** 이모지 번호 */
+  emojiId?: number
+}
+export type UserEmojiHighlightsResponse = {
+  /** 랜덤 이모지 목록 */
+  randomEmojis?: RandomUserEmojiResponse[]
+  /** 대표 이모지 목록 */
+  representativeEmojis?: RepresentativeEmojiResponse[]
+  latestMyEmojiResponse?: LatestMyEmojiResponse
+}
+export type ApiResponseUserEmojiHighlightsResponse = {
+  code?: string
+  message?: string
+  data?: UserEmojiHighlightsResponse
 }
 export const {
   useCreateUserEmojiMutation,
   useGetUserEmojiDetailQuery,
   useLazyGetUserEmojiDetailQuery,
   useDeleteUserEmojiMutation,
-  useGetRandomUserEmojisQuery,
-  useLazyGetRandomUserEmojisQuery,
   useGetLatestUserEmojiQuery,
   useLazyGetLatestUserEmojiQuery,
+  useGetUserEmojiHighlightsQuery,
+  useLazyGetUserEmojiHighlightsQuery,
 } = injectedRtkApi

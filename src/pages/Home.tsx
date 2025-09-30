@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import SideSheet from '../components/SideSheet'
+import PostSideSheet from '@/features/sideSheet/main-side-sheet'
 
 const Home = () => {
   const [open, setOpen] = useState(false)
@@ -18,8 +18,8 @@ const Home = () => {
         {open ? '사이드시트 닫기' : '사이드시트 열기'}
       </button>
 
-      {/* 사이드시트 */}
-      <SideSheet
+      {/* 게시글 + 채팅 사이드시트 */}
+      <PostSideSheet
         isOpen={open}
         onClose={() => setOpen(false)}
         userName={userName}

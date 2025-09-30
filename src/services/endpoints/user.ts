@@ -62,11 +62,11 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg.emailVerificationConfirmRequest,
       }),
     }),
-    deleteUser: build.mutation<DeleteUserApiResponse, DeleteUserApiArg>({
+    withdraw: build.mutation<WithdrawApiResponse, WithdrawApiArg>({
       query: (queryArg) => ({
-        url: `/api/users/delete`,
+        url: `/api/users/me`,
         method: 'DELETE',
-        body: queryArg.userDeleteRequest,
+        body: queryArg.userWithdrawalRequest,
       }),
     }),
   }),
@@ -107,9 +107,9 @@ export type ConfirmVerificationEmailApiResponse =
 export type ConfirmVerificationEmailApiArg = {
   emailVerificationConfirmRequest: EmailVerificationConfirmRequest
 }
-export type DeleteUserApiResponse = /** status 200 OK */ ApiResponseVoid
-export type DeleteUserApiArg = {
-  userDeleteRequest: UserDeleteRequest
+export type WithdrawApiResponse = /** status 200 OK */ ApiResponseVoid
+export type WithdrawApiArg = {
+  userWithdrawalRequest: UserWithdrawalRequest
 }
 export type LoginResponse = {
   refreshToken?: string
@@ -155,8 +155,6 @@ export type RegisterRequest = {
 export type UserResponse = {
   /** 회원 번호 */
   userId?: number
-  /** 이메일 */
-  email?: string
   /** 닉네임 */
   nickname?: string
 }
@@ -190,7 +188,7 @@ export type EmailVerificationConfirmRequest = {
   /** 이메일로 발송된 인증 코드 */
   verificationCode: string
 }
-export type UserDeleteRequest = {
+export type UserWithdrawalRequest = {
   /** 현재 계정의 비밀번호 */
   password: string
 }
@@ -203,5 +201,5 @@ export const {
   useLoginMutation,
   useSendVerificationEmailMutation,
   useConfirmVerificationEmailMutation,
-  useDeleteUserMutation,
+  useWithdrawMutation,
 } = injectedRtkApi
