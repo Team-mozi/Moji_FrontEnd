@@ -1,44 +1,50 @@
 import LoginForm from '@/features/auth/LoginForm'
 import Button from '@/components/Button'
-import { useSelector, useDispatch } from 'react-redux'
-import type { RootState, AppDispatch } from '@/store/store'
-import { logout } from '@/store/slices/authSlice'
+import { useSelector } from 'react-redux'
+import type { RootState } from '@/store/store'
 import { useNavigate } from 'react-router-dom'
+import BackSheet from '@/components/BackSheet'
+import { useEffect } from 'react'
 
 const Login = () => {
-  const { isLoggedIn, email } = useSelector((state: RootState) => state.auth)
-  const dispatch = useDispatch<AppDispatch>()
+  const { isLoggedIn } = useSelector((state: RootState) => state.auth)
   const navigate = useNavigate()
 
-  // 로그아웃 (추후 삭제 예정)
-  const handleLogout = () => {
-    dispatch(logout())
-    navigate('/login')
-  }
+  // 로그인 상태면 로그인 페이지 접근 차단
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate('/') // 홈으로 이동
+    }
+  }, [isLoggedIn, navigate])
 
   return (
-    <div className='flex flex-col items-center justify-center min-h-screen bg-white'>
-      <div className='w-full max-w-xl p-8 sm:p-10 space-y-6'>
-        <div className='flex flex-row items-center space-x-2'>
-          <h2 className='text-2xl font-bold text-black'>로그인</h2>
+    <BackSheet>
+      <div className='flex w-full h-full justify-center'>
+        {/* 왼쪽 영역 */}
+        <div className='w-full flex flex-col justify-center p-12 rounded-l-xl'>
+          <h1 className='text-4xl font-extrabold text-orange_five'>MOZI</h1>
+          <p className='text-lg font-medium mt-4'>
+            당신의 하루, 하나의 이모지로 전하세요 😊
+          </p>
+          <p className='text-md pt-24'>
+            아직 가입하지 않으셨나요? <br />
+            가입하고 오늘의 기분을 남겨보세요
+          </p>
+          <Button
+            label='회원가입'
+            type='button'
+            onClick={() => navigate('/register')}
+            className='mt-6'
+          />
         </div>
 
-        {isLoggedIn ? (
-          <>
-            <p className='mb-4'>{email}님, 이미 로그인 되어 있습니다.</p>
-            {/* 로그아웃 추후 삭제 예정  */}
-            <Button
-              label='로그아웃'
-              type='button'
-              baseButton
-              onClick={handleLogout}
-            />
-          </>
-        ) : (
+        <div className='absolute top-20 bottom-20 left-1/2 w-px bg-gray-300'></div>
+        {/* 오른쪽 로그인 영역 */}
+        <div className='w-full flex flex-col justify-center items-center p-12'>
           <LoginForm />
-        )}
+        </div>
       </div>
-    </div>
+    </BackSheet>
   )
 }
 
