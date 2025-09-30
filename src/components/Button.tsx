@@ -2,7 +2,7 @@
  * Button 컴포넌트가 받을 수 있는 props의 타입을 정의합니다.
  */
 type ButtonProps = {
-  label: string // 버튼에 표시될 텍스트입니다.
+  label: string | React.ReactNode // 버튼에 표시될 텍스트입니다.
   onClick?: () => void // 버튼 클릭 시 실행될 함수입니다.
   className?: string // Tailwind CSS 클래스를 추가하여 스타일을 커스텀할 수 있습니다.
   type?: 'button' | 'submit' // 버튼의 HTML 타입을 지정합니다. (기본값: 'button')
