@@ -1,60 +1,24 @@
-import React, { useState } from 'react'
 import Input from '@/components/Input'
 import Button from '@/components/Button'
-import { UserApi } from '@/services/endpoints/user'
-import { useNavigate } from 'react-router-dom'
+import { useRegister } from '@/hooks/useRegister'
 
 const RegisterForm = () => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-  const [passwordMatchError, setPasswordMatchError] = useState('')
-
-  const [register] = UserApi.useRegisterMutation()
-  const navigate = useNavigate()
-
-  // 🔹 공통: 비밀번호 일치 여부 검증
-  const validatePasswords = (pwd: string, confirmPwd: string) => {
-    if (pwd && confirmPwd && pwd !== confirmPwd) {
-      setPasswordMatchError('비밀번호가 일치하지 않습니다.')
-    } else {
-      setPasswordMatchError('')
-    }
-  }
-
-  // 비밀번호 입력 시
-  const handlePasswordChange = (value: string) => {
-    setPassword(value)
-    validatePasswords(value, confirmPassword)
-  }
-
-  // 비밀번호 재확인 입력 시
-  const handleConfirmPasswordChange = (value: string) => {
-    setConfirmPassword(value)
-    validatePasswords(password, value)
-  }
-
-  // 회원가입 요청
-  const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-
-    // 불일치 시 API 요청 차단
-    if (password !== confirmPassword) return
-
-    try {
-      await register({
-        registerRequest: { email, password, agreed: true },
-      }).unwrap()
-      console.log('회원가입 성공!')
-      navigate('/login')
-    } catch (err) {
-      console.error('회원가입 실패:', err)
-    }
-  }
+  const {
+    email,
+    setEmail,
+    password,
+    confirmPassword,
+    passwordMatchError,
+    apiError,
+    isLoading,
+    handlePasswordChange,
+    handleConfirmPasswordChange,
+    handleSignup,
+  } = useRegister()
 
   return (
-    <form onSubmit={handleSignup} className='flex flex-col space-y-4'>
-      <div className='space-y-6'>
+    <form onSubmit={handleSignup} className='flex flex-col'>
+      <div className='space-y-7'>
         {/* 이메일 입력 + 인증 버튼 */}
         <div className='flex items-end space-x-2 w-full'>
           <Input
@@ -115,10 +79,19 @@ const RegisterForm = () => {
           errorMessage={passwordMatchError}
           showError={!!passwordMatchError}
         />
+
+        {/* API 에러 메시지 (추후 토스트메시지로 개발 예정) */}
+        {apiError && <p className='text-red-500 text-sm'>{apiError}</p>}
       </div>
 
-      <div className='pt-2'>
-        <Button label='회원가입 완료' type='submit' baseButton />
+      {/* 회원가입 버튼 */}
+      <div className='pt-10'>
+        <Button
+          type='submit'
+          baseButton
+          label='회원가입 완료'
+          loading={isLoading}
+        />
       </div>
     </form>
   )

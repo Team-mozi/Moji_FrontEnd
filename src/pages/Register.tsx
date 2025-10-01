@@ -1,15 +1,16 @@
 import RegisterForm from '@/features/auth/RegisterForm'
+import BackSheet from '@/components/BackSheet'
 
 const Register = () => {
   return (
-    <div className='flex flex-col items-center justify-center min-h-screen bg-white'>
-      <div className='w-full max-w-xl p-8 sm:p-10 space-y-6'>
-        <div className='flex flex-row items-center space-x-2'>
-          <h2 className='text-2xl font-bold text-black'>회원가입</h2>
+    <BackSheet showHeader={true} title='회원가입'>
+      <div className='flex flex-col items-center justify-center w-full'>
+        <div className='w-full max-w-[448px]'>
+          <RegisterForm />
         </div>
-        <RegisterForm />
       </div>
-    </div>
+    </BackSheet>
   )
 }
+
 export default Register

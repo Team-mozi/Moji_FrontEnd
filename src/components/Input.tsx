@@ -82,7 +82,7 @@ const Input = ({
       {label && (
         <label
           htmlFor={name}
-          className='font-medium text-sm sm:text-base text-black'
+          className='font-normal text-sm sm:text-base text-black'
         >
           {label}
         </label>
@@ -102,7 +102,7 @@ const Input = ({
             ${error || errorMessage ? 'focus:ring-red-500' : 'focus:ring-orange_three'}
             ${inputPaddingRightClass}
             placeholder-gray_one
-            placeholder:font-normal
+            placeholder:font-light
             ${inputSizeClasses[size]}
             ${className}`}
         />
@@ -116,7 +116,7 @@ const Input = ({
       {/* 에러 메시지 조건부 렌더링 */}
       {showError && (errorMessage || error) && (
         <p
-          className={`absolute -bottom-5 text-xs sm:text-sm mt-1 ${errorClassName}`}
+          className={`absolute -bottom-5 text-[10px] sm:text-[12px] mt-1 ${errorClassName}`}
         >
           {errorMessage || error}
         </p>
