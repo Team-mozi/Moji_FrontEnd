@@ -8,6 +8,7 @@ type ButtonProps = {
   type?: 'button' | 'submit' // 버튼의 HTML 타입을 지정합니다. (기본값: 'button')
   baseButton?: boolean // 이 값이 true일 경우, 주황버튼 색상 스타일이 적용됩니다.
   size?: 's' | 'm' | 'l' // 버튼의 크기 ('s', 'm', 'l')를 설정합니다. (기본값: 'full')
+  loading?: boolean // 로딩 상태 여부
 }
 
 const Button = ({
@@ -17,6 +18,7 @@ const Button = ({
   type = 'button',
   baseButton = false,
   size,
+  loading = false,
 }: ButtonProps) => {
   // 모든 버튼에 공통으로 적용되는 기본 스타일들을 정의합니다.
   const baseClasses = `
@@ -47,7 +49,13 @@ const Button = ({
       // 기본 스타일, 색상 스타일, 너비 스타일, 그리고 사용자가 추가한 커스텀 스타일을 조합하여 적용합니다.
       className={`${baseClasses} ${colorClasses} ${buttonSizeClasses} ${className}`}
     >
-      {label}
+      {loading ? (
+        <div className='flex items-center justify-center space-x-2'>
+          <div className='w-5 h-5 border-2 border-t-white border-r-white border-b-transparent border-l-transparent rounded-full animate-spin'></div>
+        </div>
+      ) : (
+        label
+      )}
     </button>
   )
 }

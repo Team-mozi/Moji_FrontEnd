@@ -41,19 +41,7 @@ const LoginForm = () => {
         비밀번호 찾기
       </button>
 
-      <Button
-        type='submit'
-        baseButton
-        label={
-          isLoading ? (
-            <div className='flex items-center justify-center space-x-2'>
-              <div className='w-5 h-5 border-2 border-t-white border-r-white border-b-transparent border-l-transparent rounded-full animate-spin'></div>
-            </div>
-          ) : (
-            '로그인'
-          )
-        }
-      />
+      <Button type='submit' baseButton label='로그인' loading={isLoading} />
     </form>
   )
 }

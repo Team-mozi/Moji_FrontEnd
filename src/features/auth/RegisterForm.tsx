@@ -89,15 +89,8 @@ const RegisterForm = () => {
         <Button
           type='submit'
           baseButton
-          label={
-            isLoading ? (
-              <div className='flex items-center justify-center space-x-2'>
-                <div className='w-5 h-5 border-2 border-t-white border-r-white border-b-transparent border-l-transparent rounded-full animate-spin'></div>
-              </div>
-            ) : (
-              '회원가입 완료'
-            )
-          }
+          label='회원가입 완료'
+          loading={isLoading}
         />
       </div>
     </form>
