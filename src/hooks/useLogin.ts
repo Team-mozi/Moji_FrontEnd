@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux'
 import { setCredentials } from '@/store/slices/authSlice'
 import { useNavigate } from 'react-router-dom'
 import type { AppDispatch } from '@/store/store'
+import { hasMessage } from '@/utils/errorGuards'
 
 /**
  * 커스텀 훅: 로그인 관련 상태와 함수 관리
@@ -55,9 +56,13 @@ export const useLogin = () => {
         // API는 성공했지만 데이터가 없는 경우
         setError('로그인에 실패했습니다.')
       }
-    } catch (err: any) {
-      // 로그인 실패 시 에러 메시지 처리
-      setError(err?.data?.message || '로그인 중 오류가 발생했습니다.')
+    } catch (err: unknown) {
+      let userMessage = '로그인에 실패했습니다.'
+
+      if (hasMessage(err)) {
+        userMessage = err.data.message
+      }
+      setError(userMessage)
       console.error('로그인 실패:', err)
     }
   }

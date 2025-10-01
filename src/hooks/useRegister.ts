@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { UserApi } from '@/services/endpoints/user'
 import { useNavigate } from 'react-router-dom'
+import { hasMessage } from '@/utils/errorGuards'
 
 /**
  * 회원가입 로직을 관리하는 훅
@@ -80,11 +81,14 @@ export const useRegister = () => {
         registerRequest: { email, password, agreed: true },
       }).unwrap()
       navigate('/login') // 성공 시 로그인 페이지로 이동
-    } catch (err: any) {
-      // API 오류 메시지를 상태에 저장
-      setApiError(err?.data?.message || '회원가입에 실패했습니다.')
+    } catch (err: unknown) {
+      const userMessage = hasMessage(err)
+        ? err.data.message
+        : '회원가입에 실패했습니다.'
+      setApiError(userMessage)
+      console.error('회원가입 실패:', err)
     } finally {
-      setIsLoading(false) // 요청 완료
+      setIsLoading(false)
     }
   }
 
