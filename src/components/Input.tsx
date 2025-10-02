@@ -18,6 +18,7 @@ type InputProps = {
   errorClassName?: string // 에러 메시지 CSS 커스터마이징
   containerClassName?: string // input 컨테이너 스타일 커스터마이징
   showError?: boolean // 에러 메시지 표시 여부
+  onErrorChange?: (error: string) => void
 }
 
 const Input = ({
@@ -38,6 +39,7 @@ const Input = ({
   errorClassName = 'text-red_one',
   containerClassName = '',
   showError = true,
+  onErrorChange,
 }: InputProps) => {
   const [value, setValue] = useState('')
   const [error, setError] = useState('')
@@ -76,6 +78,7 @@ const Input = ({
     setError(validationError)
 
     if (onChange) onChange(inputValue)
+    if (onErrorChange) onErrorChange(validationError || '')
   }
 
   const inputPaddingRightClass = maxLength && showLength ? 'pr-14' : 'pr-4'

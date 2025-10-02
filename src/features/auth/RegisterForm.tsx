@@ -1,6 +1,7 @@
 import Input from '@/components/Input'
 import Button from '@/components/Button'
 import { useRegister } from '@/hooks/useRegister'
+import { useState } from 'react'
 
 const RegisterForm = () => {
   const {
@@ -16,6 +17,18 @@ const RegisterForm = () => {
     handleSignup,
   } = useRegister()
 
+  const [emailError, setEmailError] = useState<string>('')
+  const [passwordError, setPasswordError] = useState<string>('')
+
+  // 버튼 활성화 여부
+  const isButtonDisabled =
+    !email ||
+    !password ||
+    !!emailError ||
+    !!passwordError ||
+    !!passwordMatchError ||
+    isLoading
+
   return (
     <form onSubmit={handleSignup} className='flex flex-col'>
       <div className='space-y-7'>
@@ -29,13 +42,16 @@ const RegisterForm = () => {
             required
             onChange={(value) => setEmail(value)}
             containerClassName='flex-1'
+            errorMessage={emailError}
+            showError={!!emailError}
+            onErrorChange={setEmailError}
           />
           <Button
             label='인증번호 전송'
             type='button'
             size='m'
             baseButton
-            className='flex-none'
+            disabled={!!emailError || !email}
           />
         </div>
 
@@ -65,6 +81,9 @@ const RegisterForm = () => {
           placeholder='비밀번호'
           required
           onChange={handlePasswordChange}
+          errorMessage={passwordError}
+          showError={!!passwordError}
+          onErrorChange={setPasswordError}
         />
 
         {/* 비밀번호 재확인 */}
@@ -91,6 +110,7 @@ const RegisterForm = () => {
           baseButton
           label='회원가입 완료'
           loading={isLoading}
+          disabled={isButtonDisabled}
         />
       </div>
     </form>

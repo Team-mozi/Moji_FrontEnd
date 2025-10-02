@@ -2,14 +2,30 @@ import Input from '@/components/Input'
 import Button from '@/components/Button'
 import { useLogin } from '@/hooks/useLogin'
 import { useNavigate } from 'react-router-dom'
+import { useState } from 'react'
 
 const LoginForm = () => {
-  const { setEmail, setPassword, error, isLoading, handleLogin } = useLogin()
+  const {
+    email,
+    password,
+    setEmail,
+    setPassword,
+    error,
+    isLoading,
+    handleLogin,
+  } = useLogin()
   const navigate = useNavigate()
 
   const handlePasswordReset = () => {
     navigate('/password-reset')
   }
+
+  const [emailError, setEmailError] = useState('')
+  const [passwordError, setPasswordError] = useState('')
+
+  // 버튼 활성화 조건
+  const isButtonDisabled =
+    !email || !password || !!emailError || !!passwordError || isLoading
 
   return (
     <form onSubmit={handleLogin} className='flex flex-col w-full space-y-4'>
@@ -21,6 +37,7 @@ const LoginForm = () => {
           placeholder='이메일'
           required
           onChange={(value) => setEmail(value)}
+          onErrorChange={setEmailError}
         />
         <Input
           label='비밀번호'
@@ -29,6 +46,7 @@ const LoginForm = () => {
           placeholder='비밀번호'
           required
           onChange={(value) => setPassword(value)}
+          onErrorChange={setPasswordError}
         />
         {error && <p className='text-red-500 text-sm'>{error}</p>}
       </div>
@@ -41,7 +59,13 @@ const LoginForm = () => {
         비밀번호 찾기
       </button>
 
-      <Button type='submit' baseButton label='로그인' loading={isLoading} />
+      <Button
+        type='submit'
+        baseButton
+        label='로그인'
+        loading={isLoading}
+        disabled={isButtonDisabled}
+      />
     </form>
   )
 }

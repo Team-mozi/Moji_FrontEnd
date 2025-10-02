@@ -18,6 +18,7 @@ const WithdrawalModal = ({ isOpen, onClose }: WithdrawalModalProps) => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const [error, setError] = useState<string | null>(null)
+  const [passwordError, setPasswordError] = useState<string>('')
 
   const handleWithdrawal = async () => {
     try {
@@ -32,6 +33,9 @@ const WithdrawalModal = ({ isOpen, onClose }: WithdrawalModalProps) => {
       setError(err?.data?.message || '비밀번호를 다시 입력해주세요.')
     }
   }
+
+  // 버튼 활성화 여부
+  const isButtonDisabled = !password || !!passwordError || isLoading
 
   return (
     <Modal isOpen={isOpen} size='md'>
@@ -48,6 +52,7 @@ const WithdrawalModal = ({ isOpen, onClose }: WithdrawalModalProps) => {
             type='password'
             placeholder='비밀번호를 입력하세요'
             onChange={(e) => setPassword(e)}
+            onErrorChange={setPasswordError}
           ></Input>
         </div>
         {/* 토스트메시지로 개발할 예정 */}
@@ -59,7 +64,7 @@ const WithdrawalModal = ({ isOpen, onClose }: WithdrawalModalProps) => {
             baseButton
             onClick={handleWithdrawal}
             loading={isLoading}
-            disabled={!password || isLoading}
+            disabled={isButtonDisabled}
           />
           <Button label='취소' onClick={onClose} />
         </div>
