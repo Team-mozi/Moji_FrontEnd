@@ -9,10 +9,12 @@ type InputProps = {
   onChange?: (value: string) => void // 값 변경 시 실행되는 콜백
   isConfirmPassword?: boolean // 비밀번호 확인용 여부 (true일 경우 규칙 검증 스킵)
   className?: string // 스타일 커스터마이징
-  maxLength?: number // 최대 입력 길이 (이 값이 있을 때만 길이 표시)
+  minLength?: number // 최소 글자 수
+  maxLength?: number // 최대 글자 수
+  showLength?: boolean // 글자 수 표시 여부
   hasShadow?: boolean // 그림자 효과 여부
   size?: 's' | 'm' | 'l' | 'xl' | 'full' // 넓이 설정 ('s', 'm', 'l', 'xl', 'full') (기본값: 'full')
-  errorMessage?: string // 외부에서 내려주는 에러 메시지
+  errorMessage?: string | React.ReactNode // 외부에서 내려주는 에러 메시지
   errorClassName?: string // 에러 메시지 CSS 커스터마이징
   containerClassName?: string // input 컨테이너 스타일 커스터마이징
   showError?: boolean // 에러 메시지 표시 여부
@@ -27,7 +29,9 @@ const Input = ({
   placeholder,
   required = false,
   type = 'text',
+  minLength,
   maxLength,
+  showLength = false,
   hasShadow = false,
   size = 'full',
   errorMessage,
@@ -74,7 +78,7 @@ const Input = ({
     if (onChange) onChange(inputValue)
   }
 
-  const inputPaddingRightClass = maxLength ? 'pr-14' : 'pr-4'
+  const inputPaddingRightClass = maxLength && showLength ? 'pr-14' : 'pr-4'
 
   return (
     <div className={`relative flex flex-col gap-1 ${containerClassName}`}>
@@ -96,6 +100,7 @@ const Input = ({
           required={required}
           value={value}
           onChange={handleChange}
+          minLength={minLength}
           maxLength={maxLength}
           className={`h-12 border rounded-xl px-4 transition-colors duration-300 focus:outline-none focus:ring-1 hover:border-orange_three font-normal text-sm sm:text-base 
             ${hasShadow ? 'shadow-md' : ''}
@@ -107,7 +112,7 @@ const Input = ({
             ${className}`}
         />
         {/* 입력 길이 표시 조건부 렌더링 */}
-        {maxLength && (
+        {showLength && maxLength && (
           <span className='absolute right-4 top-1/2 -translate-y-1/2 text-gray_one text-xs pointer-events-none'>
             {value.length}/{maxLength}
           </span>
