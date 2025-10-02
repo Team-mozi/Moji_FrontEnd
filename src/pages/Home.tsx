@@ -1,10 +1,23 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import PostSideSheet from '@/features/sideSheet/main-side-sheet'
+import { useSelector } from 'react-redux'
+import type { RootState } from '@/store/store'
+import NicknameForm from '@/features/modal/NickNameModal'
+import Modal from '@/components/Modal'
 
 const Home = () => {
   const [open, setOpen] = useState(false)
   const userName = '혜수'
+  const { nickname, isLoggedIn } = useSelector((state: RootState) => state.auth)
+  const [isOpen, setModalOpen] = useState(false)
+
+  // 로그인 상태 + 닉네임 null => 닉네임 모달 열기
+  useEffect(() => {
+    if (isLoggedIn && !nickname) {
+      setModalOpen(true)
+    }
+  }, [isLoggedIn, nickname])
 
   return (
     <div className='p-6'>
@@ -24,6 +37,11 @@ const Home = () => {
         onClose={() => setOpen(false)}
         userName={userName}
       />
+
+      {/* 닉네임 설정 모달 */}
+      <Modal isOpen={isOpen} size='md'>
+        <NicknameForm onClose={() => setModalOpen(false)} />
+      </Modal>
     </div>
   )
 }

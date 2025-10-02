@@ -9,6 +9,7 @@ type ButtonProps = {
   baseButton?: boolean // 이 값이 true일 경우, 주황버튼 색상 스타일이 적용됩니다.
   size?: 's' | 'm' | 'l' // 버튼의 크기 ('s', 'm', 'l')를 설정합니다. (기본값: 'full')
   loading?: boolean // 로딩 상태 여부
+  disabled?: boolean // 버튼 클릭 불가능 상태
 }
 
 const Button = ({
@@ -19,12 +20,14 @@ const Button = ({
   baseButton = false,
   size,
   loading = false,
+  disabled = false,
 }: ButtonProps) => {
   // 모든 버튼에 공통으로 적용되는 기본 스타일들을 정의합니다.
   const baseClasses = `
     h-12
     rounded-xl px-4 text-sm sm:text-base font-[350]
     focus:outline-none transition-colors duration-300
+    ${disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}
   `
 
   // size prop에 따라 다르게 적용되는 너비 스타일을 정의합니다.
@@ -48,6 +51,7 @@ const Button = ({
       onClick={onClick}
       // 기본 스타일, 색상 스타일, 너비 스타일, 그리고 사용자가 추가한 커스텀 스타일을 조합하여 적용합니다.
       className={`${baseClasses} ${colorClasses} ${buttonSizeClasses} ${className}`}
+      disabled={disabled || loading}
     >
       {loading ? (
         <div className='flex items-center justify-center space-x-2'>

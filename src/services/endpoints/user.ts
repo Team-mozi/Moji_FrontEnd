@@ -22,6 +22,26 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg.registerRequest,
       }),
     }),
+    sendPasswordResetEmail: build.mutation<
+      SendPasswordResetEmailApiResponse,
+      SendPasswordResetEmailApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/users/password-reset/send-email`,
+        method: 'POST',
+        body: queryArg.emailVerificationRequest,
+      }),
+    }),
+    resetPassword: build.mutation<
+      ResetPasswordApiResponse,
+      ResetPasswordApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/users/password-reset/confirm`,
+        method: 'POST',
+        body: queryArg.passwordResetRequest,
+      }),
+    }),
     updateUserNickname: build.mutation<
       UpdateUserNicknameApiResponse,
       UpdateUserNicknameApiArg
@@ -62,6 +82,17 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg.emailVerificationConfirmRequest,
       }),
     }),
+    checkNicknameDuplicate: build.query<
+      CheckNicknameDuplicateApiResponse,
+      CheckNicknameDuplicateApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/users/nickname/exists`,
+        params: {
+          nickname: queryArg.nickname,
+        },
+      }),
+    }),
     withdraw: build.mutation<WithdrawApiResponse, WithdrawApiArg>({
       query: (queryArg) => ({
         url: `/api/users/me`,
@@ -86,6 +117,15 @@ export type RegisterApiResponse = /** status 200 OK */ ApiResponseLong
 export type RegisterApiArg = {
   registerRequest: RegisterRequest
 }
+export type SendPasswordResetEmailApiResponse =
+  /** status 200 OK */ ApiResponseVoid
+export type SendPasswordResetEmailApiArg = {
+  emailVerificationRequest: EmailVerificationRequest
+}
+export type ResetPasswordApiResponse = /** status 200 OK */ ApiResponseVoid
+export type ResetPasswordApiArg = {
+  passwordResetRequest: PasswordResetRequest
+}
 export type UpdateUserNicknameApiResponse =
   /** status 200 OK */ ApiResponseUserResponse
 export type UpdateUserNicknameApiArg = {
@@ -107,18 +147,24 @@ export type ConfirmVerificationEmailApiResponse =
 export type ConfirmVerificationEmailApiArg = {
   emailVerificationConfirmRequest: EmailVerificationConfirmRequest
 }
+export type CheckNicknameDuplicateApiResponse =
+  /** status 200 OK */ ApiResponseNicknameExistsResponse
+export type CheckNicknameDuplicateApiArg = {
+  nickname: string
+}
 export type WithdrawApiResponse = /** status 200 OK */ ApiResponseVoid
 export type WithdrawApiArg = {
   userWithdrawalRequest: UserWithdrawalRequest
 }
 export type LoginResponse = {
-  refreshToken?: string
-  /** 액세스 토큰 */
-  accessToken?: string
   /** 회원 번호 */
   userId?: number
-  /** 닉네임 */
+  /**  회원 닉네임 */
   nickname?: string
+  /** 액세스 토큰 */
+  accessToken?: string
+  /** 리프래시 토큰 */
+  refreshToken?: string
 }
 export type ApiResponseLoginResponse = {
   code?: string
@@ -152,6 +198,21 @@ export type RegisterRequest = {
   /** 약관동의 여부 */
   agreed?: boolean
 }
+export type ApiResponseVoid = {
+  code?: string
+  message?: string
+  data?: object
+}
+export type EmailVerificationRequest = {
+  /** 인증을 진행할 이메일 */
+  email: string
+}
+export type PasswordResetRequest = {
+  /** 인증 완료된 이메일 */
+  email: string
+  /** 새로운 비밀번호 */
+  newPassword: string
+}
 export type UserResponse = {
   /** 회원 번호 */
   userId?: number
@@ -167,26 +228,25 @@ export type NicknameRequest = {
   /** 설정할 닉네임 */
   nickname: string
 }
-export type ApiResponseVoid = {
-  code?: string
-  message?: string
-  data?: object
-}
 export type LoginRequest = {
   /** 이메일 */
   email: string
   /** 비밀번호 */
   password: string
 }
-export type EmailVerificationRequest = {
-  /** 인증을 진행할 이메일 */
-  email: string
-}
 export type EmailVerificationConfirmRequest = {
   /** 인증을 진행한 이메일 */
   email: string
   /** 이메일로 발송된 인증 코드 */
   verificationCode: string
+}
+export type NicknameExistsResponse = {
+  exists?: boolean
+}
+export type ApiResponseNicknameExistsResponse = {
+  code?: string
+  message?: string
+  data?: NicknameExistsResponse
 }
 export type UserWithdrawalRequest = {
   /** 현재 계정의 비밀번호 */
@@ -196,10 +256,14 @@ export const {
   useSocialLoginMutation,
   useReissueMutation,
   useRegisterMutation,
+  useSendPasswordResetEmailMutation,
+  useResetPasswordMutation,
   useUpdateUserNicknameMutation,
   useLogoutMutation,
   useLoginMutation,
   useSendVerificationEmailMutation,
   useConfirmVerificationEmailMutation,
+  useCheckNicknameDuplicateQuery,
+  useLazyCheckNicknameDuplicateQuery,
   useWithdrawMutation,
 } = injectedRtkApi
