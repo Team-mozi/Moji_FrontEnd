@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux'
 import type { RootState } from '@/store/store'
 import NicknameForm from '@/features/modal/NickNameModal'
 import Modal from '@/components/Modal'
+import MyPage from '@/features/mypage'
 
 const Home = () => {
   const [open, setOpen] = useState(false)
@@ -42,6 +43,9 @@ const Home = () => {
       <Modal isOpen={isOpen} size='md'>
         <NicknameForm onClose={() => setModalOpen(false)} />
       </Modal>
+
+      {/* 마이페이지 사이드시트 */}
+      <MyPage />
     </div>
   )
 }
